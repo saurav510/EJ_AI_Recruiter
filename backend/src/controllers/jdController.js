@@ -156,10 +156,12 @@ const runPipeline = async (req, res) => {
       await candidateMatch.save();
 
       // Step 5: Generate Outreach Messages
+      const companyName = jobData.companyName || jobData.company || jobData.industry || 'the company';
+
       const generatedMessages = await generateOutreachMessages({
         candidateName: parsedResumeData.candidateName,
         jobTitle: jobData.jobTitle,
-        companyName: jobData.industry || 'the company',
+        companyName,
         matchScore: matchResult.overallScore,
         candidateSkills: parsedResumeData.skills,
         hiringDecision: matchResult.hiringDecision,
@@ -179,7 +181,7 @@ const runPipeline = async (req, res) => {
         resumeId: resume._id,
         candidateName: parsedResumeData.candidateName,
         jobTitle: jobData.jobTitle,
-        companyName: jobData.industry || '',
+        companyName,   // resolved above — never empty
         matchScore: matchResult.overallScore,
         whatsappMessage: generatedMessages.whatsappMessage,
         followUpMessage: generatedMessages.followUpMessage,
