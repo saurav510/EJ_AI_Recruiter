@@ -1,7 +1,15 @@
 import axios from 'axios';
 
+// In production (Vercel), Vite's dev proxy doesn't exist.
+// We must use an absolute URL so requests reach the real backend.
+// VITE_API_BASE_URL is set in Vercel env vars (e.g. https://apibackendgp.earlyjobs.ai).
+// Locally, if not set, fall back to '/api' which the Vite dev proxy forwards.
+const BASE_URL = import.meta.env.VITE_API_BASE_URL
+  ? `${import.meta.env.VITE_API_BASE_URL}/api`
+  : '/api';
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: BASE_URL,
   headers: { 'Content-Type': 'application/json' },
   timeout: 60000,
 });
